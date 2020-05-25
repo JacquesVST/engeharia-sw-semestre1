@@ -34,4 +34,43 @@ router.get('/buscar/:id', async (req, res) => {
     }
 });
 
+router.put('/alterar/:id', async (req, res) => {
+    const id = req.params.id;
+    const { descricao, dataPedido, dataChegada, custo, preco, categoria, estoque, origem, observacao } = req.body;
+
+    try {
+        const produto = await Produto.findByIdAndUpdate(
+            id,
+            {
+                descricao: descricao,
+                dataPedido: dataPedido,
+                dataChegada: dataChegada,
+                custo: custo,
+                preco: preco,
+                categoria: categoria,
+                estoque: estoque,
+                origem: origem,
+                observacao: observacao
+            },
+            { new: true }
+        );
+        return res.send({ produto });
+    } catch (err) {
+        console.log(err);
+        return res.status(400).send({ error: 'Falha ao Alterar' });
+    }
+});
+
+router.delete('/deletar/:id', async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const produto = await Produto.findByIdAndDelete(id);
+        return res.send({ produto });
+    } catch (err) {
+        console.log(err);
+        return res.status(400).send({ error: 'Falha ao Deletar' });
+    }
+});
+
 module.exports = app => app.use('/produto', router);

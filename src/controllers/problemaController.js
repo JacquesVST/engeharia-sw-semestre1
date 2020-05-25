@@ -35,4 +35,37 @@ router.get('/buscar/:id', async (req, res) => {
     }
 });
 
+router.put('/alterar/:id', async (req, res) => {
+    const id = req.params.id;
+    const { descricao, preocedimentos, observacao} = req.body;
+
+    try {
+        const problema = await Problema.findByIdAndUpdate(
+            id,
+            {
+                descricao: descricao,
+                procedimentos: procedimentos,
+                observacao: observacao
+            },
+            { new: true }
+        );
+        return res.send({ problema });
+    } catch (err) {
+        console.log(err);
+        return res.status(400).send({ error: 'Falha ao Alterar' });
+    }
+});
+
+router.delete('/deletar/:id', async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const aparelho = await Aparelho.findByIdAndDelete(id)
+        return res.send({ aparelho });
+    } catch (err) {
+        console.log(err);
+        return res.status(400).send({ error: 'Falha ao Deletar' });
+    }
+});
+
 module.exports = app => app.use('/problema', router);

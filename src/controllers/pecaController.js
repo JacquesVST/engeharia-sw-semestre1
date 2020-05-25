@@ -35,4 +35,43 @@ router.get('/buscar/:id', async (req, res) => {
     }
 });
 
+router.put('/alterar/:id', async (req, res) => {
+    const id = req.params.id;
+    const { descricao, servico, dataPedido, dataChegada, categoria, origem, fabricante, valor, observacao } = req.body;
+
+    try {
+        const peca = await Peca.findByIdAndUpdate(
+            id,
+            {
+                descricao: descricao,
+                servico: servico,
+                dataPedido: dataPedido,
+                dataChegada: dataChegada,
+                categoria: categoria,
+                origem: origem,
+                fabricante: fabricante,
+                valor: valor,
+                observacao: observacao
+            },
+            { new: true }
+        ).populate('fabricante servico');
+        return res.send({ peca });
+    } catch (err) {
+        console.log(err);
+        return res.status(400).send({ error: 'Falha ao Alterar' });
+    }
+});
+
+router.delete('/deletar/:id', async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const peca = await Peca.findByIdAndDelete(id).populate('fabricante servico');
+        return res.send({ peca });
+    } catch (err) {
+        console.log(err);
+        return res.status(400).send({ error: 'Falha ao Deletar' });
+    }
+});
+
 module.exports = app => app.use('/peca', router);

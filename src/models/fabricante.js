@@ -8,7 +8,7 @@ const FabricanteSchema = new mongoose.Schema({
     siteOficial: {
         type: String,
     },
-    contatoprincipal: {
+    contatoPrincipal: {
         type: String,
     },
     contatoSecundario: {

@@ -55,11 +55,48 @@ router.get('/buscar/:id', async (req, res) => {
     const id = req.params.id;
 
     try {
-        const cliente = await Cleinte.findById(id);
+        const cliente = await Cliente.findById(id);
         return res.send({ cliente });
     } catch (err) {
         console.log(err);
         return res.status(400).send({ error: 'Falha ao Buscar' });
+    }
+});
+
+router.put('/alterar/:id', async (req, res) => {
+    const id = req.params.id;
+    const { nome, cpf, email, senha, dataNascimento, telefone, observacao } = req.body;
+
+    try {
+        const cliente = await Cliente.findByIdAndUpdate(
+            id,
+            {
+                nome: nome,
+                cpf: cpf,
+                email: email,
+                senha: senha,
+                dataNascimento: dataNascimento,
+                telefone: telefone,
+                observacao: observacao
+            },
+            { new: true }
+        );
+        return res.send({ cliente });
+    } catch (err) {
+        console.log(err);
+        return res.status(400).send({ error: 'Falha ao Alterar' });
+    }
+});
+
+router.delete('/deletar/:id', async (req, res) => {
+    const id = req.params.id;
+
+    try {
+        const cliente = await Cliente.findByIdAndDelete(id)
+        return res.send({ cliente });
+    } catch (err) {
+        console.log(err);
+        return res.status(400).send({ error: 'Falha ao Deletar' });
     }
 });
 

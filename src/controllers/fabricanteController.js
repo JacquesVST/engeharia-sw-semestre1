@@ -35,27 +35,38 @@ router.get('/buscar/:id', async (req, res) => {
     }
 });
 
-router.put('/alterar', async (req, res) => {
-    const { id, nome, siteOficial, contatoPrincipal, contatoSecundario, observacao } = req.body;
+router.put('/alterar/:id', async (req, res) => {
+    const id = req.params.id;
+    const { nome, siteOficial, contatoPrincipal, contatoSecundario, observacao } = req.body;
 
     try {
-        const fabricante = await Fabricante.findOneAndUpdate({ id: id }, { nome: nome, siteOficial: siteOficial, contatoSecundario: contatoPrincipal, contatoSecundario: contatoSecundario, observacao: observacao })
+        const fabricante = await Fabricante.findByIdAndUpdate(
+            id,
+            {
+                nome: nome,
+                siteOficial: siteOficial,
+                contatoPrincipal: contatoPrincipal,
+                contatoSecundario: contatoSecundario,
+                observacao: observacao
+            },
+            { new: true }
+        );
         return res.send({ fabricante });
     } catch (err) {
         console.log(err);
-        return res.status(400).send({ error: 'Falha ao Listar' });
+        return res.status(400).send({ error: 'Falha ao Alterar' });
     }
 });
 
-router.deletar('/deletar', async (req, res) => {
-    const { id } = req.body;
+router.delete('/deletar/:id', async (req, res) => {
+    const id = req.params.id;
 
     try {
-        const fabricante = await Fabricante.findOneAndDelete({ id: id })
+        const fabricante = await Fabricante.findByIdAndDelete(id)
         return res.send({ fabricante });
     } catch (err) {
         console.log(err);
-        return res.status(400).send({ error: 'Falha ao Listar' });
+        return res.status(400).send({ error: 'Falha ao Deletar' });
     }
 });
 
