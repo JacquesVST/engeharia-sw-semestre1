@@ -16,7 +16,7 @@ router.post('/registrar', async (req, res) => {
 router.get('/listar', async (req, res) => {
     try {
         const vendas = await Venda.find().populate('produto');
-        return res.send({ venda });
+        return res.send({ vendas });
     } catch (err) {
         console.log(err);
         return res.status(400).send({ error: 'Falha ao Listar' });
