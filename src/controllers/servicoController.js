@@ -34,6 +34,21 @@ router.get('/listar', async (req, res) => {
     }
 });
 
+router.get('/filtrar', async (req, res) => {
+    try {
+        const servicos = await Servico.find(req.body.filtro).sort(req.body.ordem).populate({
+            path: 'cliente aparelho problema',
+            populate: {
+                path: 'fabricante'
+            }
+        });
+        return res.send({ servicos });
+    } catch (err) {
+        console.log(err);
+        return res.status(400).send({ error: 'Falha ao Filtrar' });
+    }
+});
+
 router.get('/buscar/:id', async (req, res) => {
     const id = req.params.id;
 

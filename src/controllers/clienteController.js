@@ -51,6 +51,16 @@ router.get('/listar', async (req, res) => {
     }
 });
 
+router.get('/filtrar', async (req, res) => {
+    try {
+        const clientes = await Cliente.find(req.body.filtro).sort(req.body.ordem);
+        return res.send({ clientes });
+    } catch (err) {
+        console.log(err);
+        return res.status(400).send({ error: 'Falha ao Filtrar' });
+    }
+});
+
 router.get('/buscar/:id', async (req, res) => {
     const id = req.params.id;
 

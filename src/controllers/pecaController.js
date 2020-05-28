@@ -4,8 +4,16 @@ const router = express.Router();
 
 router.post('/registrar', async (req, res) => {
     try {
-        const peca = await Peca.create(req.body);
-        
+        const peca = await Peca.create(req.body).populate({
+            path: 'servico fabricante',
+            populate: {
+                path: 'cliente aparelho problema',
+                populate: {
+                    path: 'fabricante'
+                }
+            }
+        });
+
         return res.send({ peca });
     } catch (err) {
         console.log(err);
@@ -15,7 +23,15 @@ router.post('/registrar', async (req, res) => {
 
 router.get('/listar', async (req, res) => {
     try {
-        const pecas = await Peca.find();
+        const pecas = await Peca.find().populate({
+            path: 'servico fabricante',
+            populate: {
+                path: 'cliente aparelho problema',
+                populate: {
+                    path: 'fabricante'
+                }
+            }
+        });
         return res.send({ pecas });
     } catch (err) {
         console.log(err);
@@ -23,11 +39,37 @@ router.get('/listar', async (req, res) => {
     }
 });
 
+router.get('/filtrar', async (req, res) => {
+    try {
+        const pecas = await Peca.find(req.body.filtro).sort(req.body.ordem).populate({
+            path: 'servico fabricante',
+            populate: {
+                path: 'cliente aparelho problema',
+                populate: {
+                    path: 'fabricante'
+                }
+            }
+        });
+        return res.send({ pecas });
+    } catch (err) {
+        console.log(err);
+        return res.status(400).send({ error: 'Falha ao Filtrar' });
+    }
+});
+
 router.get('/buscar/:id', async (req, res) => {
     const id = req.params.id;
 
     try {
-        const peca = await Peca.findById(id);
+        const peca = await Peca.findById(id).populate({
+            path: 'servico fabricante',
+            populate: {
+                path: 'cliente aparelho problema',
+                populate: {
+                    path: 'fabricante'
+                }
+            }
+        });
         return res.send({ peca });
     } catch (err) {
         console.log(err);
@@ -54,7 +96,15 @@ router.put('/alterar/:id', async (req, res) => {
                 observacao: observacao
             },
             { new: true }
-        ).populate('fabricante servico');
+        ).populate({
+            path: 'servico fabricante',
+            populate: {
+                path: 'cliente aparelho problema',
+                populate: {
+                    path: 'fabricante'
+                }
+            }
+        });
         return res.send({ peca });
     } catch (err) {
         console.log(err);
@@ -66,7 +116,15 @@ router.delete('/deletar/:id', async (req, res) => {
     const id = req.params.id;
 
     try {
-        const peca = await Peca.findByIdAndDelete(id).populate('fabricante servico');
+        const peca = await Peca.findByIdAndDelete(id).populate({
+            path: 'servico fabricante',
+            populate: {
+                path: 'cliente aparelho problema',
+                populate: {
+                    path: 'fabricante'
+                }
+            }
+        });
         return res.send({ peca });
     } catch (err) {
         console.log(err);
