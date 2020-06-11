@@ -47,7 +47,7 @@ router.get('/buscar/:id', async (req, res) => {
 
 router.put('/alterar/:id', async (req, res) => {
     const id = req.params.id;
-    const { descricao, preocedimentos, observacao} = req.body;
+    const { descricao, procedimentos, observacao} = req.body;
 
     try {
         const problema = await Problema.findByIdAndUpdate(
