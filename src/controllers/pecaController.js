@@ -4,15 +4,16 @@ const router = express.Router();
 
 router.post('/registrar', async (req, res) => {
     try {
-        const peca = await Peca.create(req.body).populate({
-            path: 'servico fabricante',
-            populate: {
-                path: 'cliente aparelho problema',
-                populate: {
-                    path: 'fabricante'
-                }
-            }
-        });
+        const peca = await Peca.create(req.body);
+        // const peca = await Peca.create(req.body).populate({
+        //     path: 'servico fabricante',
+        //     populate: {
+        //         path: 'cliente aparelho problema',
+        //         populate: {
+        //             path: 'fabricante'
+        //         }
+        //     }
+        // });
 
         return res.send({ peca });
     } catch (err) {
