@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.post('/registrar', async (req, res) => {
     try {
-        const venda = await Venda.create(req.body).populate('produto');
+        const venda = await (await Venda.create(req.body)).populate('produto');
         
         return res.send({ venda });
     } catch (err) {

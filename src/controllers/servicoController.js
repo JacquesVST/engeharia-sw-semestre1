@@ -4,13 +4,12 @@ const router = express.Router();
 
 router.post('/registrar', async (req, res) => {
     try {
-        const servico = await Servico.create(req.body);
-        // const servico = await Servico.create(req.body).populate({
-        //     path: 'cliente aparelho problema',
-        //     populate: {
-        //         path: 'fabricante'
-        //     }
-        // });
+        const servico = await (await Servico.create(req.body)).populate({
+            path: 'cliente aparelho problema',
+            populate: {
+                path: 'fabricante'
+            }
+        });
 
         return res.send({ servico });
     } catch (err) {

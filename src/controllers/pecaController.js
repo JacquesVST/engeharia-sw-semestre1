@@ -4,16 +4,15 @@ const router = express.Router();
 
 router.post('/registrar', async (req, res) => {
     try {
-        const peca = await Peca.create(req.body);
-        // const peca = await Peca.create(req.body).populate({
-        //     path: 'servico fabricante',
-        //     populate: {
-        //         path: 'cliente aparelho problema',
-        //         populate: {
-        //             path: 'fabricante'
-        //         }
-        //     }
-        // });
+        const peca = await (await Peca.create(req.body)).populate({
+            path: 'servico fabricante',
+            populate: {
+                path: 'cliente aparelho problema',
+                populate: {
+                    path: 'fabricante'
+                }
+            }
+        });
 
         return res.send({ peca });
     } catch (err) {
@@ -42,7 +41,8 @@ router.get('/listar', async (req, res) => {
 
 router.get('/filtrar', async (req, res) => {
     try {
-        const pecas = await Peca.find(req.body.filtro).sort(req.body.ordem).populate({
+        let filtro = JSON.parse(req.query.filtro)
+        const pecas = await Peca.find(filtro).sort(req.query.ordem).populate({
             path: 'servico fabricante',
             populate: {
                 path: 'cliente aparelho problema',
