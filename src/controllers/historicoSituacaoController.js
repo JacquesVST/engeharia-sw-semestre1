@@ -25,7 +25,8 @@ router.get('/listar', async (req, res) => {
 
 router.get('/filtrar', async (req, res) => {
     try {
-        const historicoSituacoes = await HistoricoSituacao.find(req.body.filtro).sort(req.body.ordem).populate('servico');
+        let filtro = JSON.parse(req.query.filtro)
+        const historicoSituacoes = await HistoricoSituacao.find(filtro).sort(req.query.ordem).populate('servico');
         return res.send({ historicoSituacoes });
     } catch (err) {
         console.log(err);
